@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: '${DB_USER:root}'
+    password: '${DB_PASSWORD:}'
+    url: '${DB_URL:jdbc:mysql://localhost:3306/mall?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai}'
+  rabbitmq:
+    addresses: '${RABBITMQ_HOST:127.0.0.1}'
+    port: 5672
+    username: '${RABBITMQ_USER:guest}'
+    password: '${RABBITMQ_PASSWORD:guest}'
+#配置mybatis路径，使得dao层的方法能找到resource下mappers层的语句
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mappers/*.xml
+logging:
+  pattern:
+    console: "[%thread] %-5level %logger{36} - %msg%n"
+wx:
+  appid: '${WX_APPID:}'
+  mchid: '${WX_MCHID:}'
+  mchkey: '${WX_MCHKEY:}'
+  notifyUrl: '${WX_NOTIFY_URL:http://localhost:8083/pay/notify}'
+  returnUrl: '${WX_RETURN_URL:}'

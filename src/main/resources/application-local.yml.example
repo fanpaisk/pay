@@ -1,0 +1,31 @@
+# 本地配置模板：复制为同目录下的 application-local.yml 并填入真实值，
+# 然后以 --spring.profiles.active=local 启动（application-local.yml 已被 .gitignore 排除，不会提交）
+#
+# 也可以完全不使用本文件，改为设置同名环境变量。
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: 'your-db-user'
+    password: 'your-db-password'
+    url: 'jdbc:mysql://localhost:3306/mall?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai'
+  rabbitmq:
+    addresses: '127.0.0.1'
+    port: 5672
+    username: 'guest'
+    password: 'guest'
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mappers/*.xml
+
+logging:
+  pattern:
+    console: "[%thread] %-5level %logger{36} - %msg%n"
+
+wx:
+  appid: 'your-wx-appid'
+  mchid: 'your-wx-mchid'
+  mchkey: 'your-wx-mchkey'
+  notifyUrl: 'http://localhost:8083/pay/notify'
+  returnUrl: 'http://127.0.0.1'
