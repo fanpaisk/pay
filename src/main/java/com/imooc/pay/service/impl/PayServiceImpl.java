@@ -98,11 +98,11 @@ public class PayServiceImpl implements IPayService {
             /// 为数据设流水号。payResponse.getOutTradeNo()是由微信产生的
             payInfo.setPlatformNumber(payResponse.getOutTradeNo());
             payInfoMapper.updateByPrimaryKeySelective(payInfo);
+            // 只有“第一次把状态改成 SUCCESS”才通知 mall。
+            // 放在 if 外面，微信重复回调时会重复发消息，消费端就会被重复触发。
+            // 注意：并发重复回调仍可能都读到 NOTPAY（更稳的做法是条件更新，见 DECISIONS D-026）。
+            amqpTemplate.convertAndSend(QUEUE_PAY_NOTIFY, new Gson().toJson(payInfo));
         }
-        //TODO pay发送MQ消息，mall接受MQ消息,
-        //TODO mq作用：处理异步，高并发场景
-        //把payInfo对象转成json
-        amqpTemplate.convertAndSend(QUEUE_PAY_NOTIFY, new Gson().toJson(payInfo));
 
 
         //4告诉微信不用通知了
