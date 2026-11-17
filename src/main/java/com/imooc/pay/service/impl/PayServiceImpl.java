@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 /// 不用创建log对象即可使用log方法的注释
 @Slf4j
@@ -72,6 +73,7 @@ public class PayServiceImpl implements IPayService {
      */
     @Override
     /// 这里用string是因为异步回调商家要返回收到通知的消息，这个消息是string
+    @Transactional
     public String asyncNotify(String notifyData) {
         //1.签名检验
         PayResponse payResponse = bestPayService.asyncNotify(notifyData);
