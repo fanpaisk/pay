@@ -16,7 +16,8 @@ public class PayServiceImplTest extends PayApplicationTests {
 
     @Test
     public void create() {
-        payServiceImpl.create("123293567918264123432352822", BigDecimal.valueOf(0.01));
+        // 金额由服务端按 orderNo 反查，这里只传订单号（需要库里有该订单）
+        payServiceImpl.create("1731000000000001");
     }
 
     @Test

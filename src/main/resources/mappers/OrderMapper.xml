@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.imooc.pay.dao.OrderMapper">
+
+  <!-- 只查“待付款”订单：status=10 见 mall 的 OrderStatusEnum.NO_PAY -->
+  <select id="selectPayableAmount" resultType="java.math.BigDecimal">
+    select payment
+    from mall_order
+    where order_no = #{orderNo,jdbcType=BIGINT}
+      and status = 10
+  </select>
+
+</mapper>

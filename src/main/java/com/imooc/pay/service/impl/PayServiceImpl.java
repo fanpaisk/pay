@@ -1,6 +1,7 @@
 package com.imooc.pay.service.impl;
 
 import com.google.gson.Gson;
+import com.imooc.pay.dao.OrderMapper;
 import com.imooc.pay.dao.PayInfoMapper;
 import com.imooc.pay.pojo.PayInfo;
 import com.imooc.pay.service.IPayService;
@@ -28,10 +29,19 @@ public class PayServiceImpl implements IPayService {
     private PayInfoMapper payInfoMapper;
 
     @Autowired
+    private OrderMapper orderMapper;
+
+    @Autowired
     private AmqpTemplate amqpTemplate;
 
     @Override
-    public PayResponse create(String orderId, BigDecimal amount) {
+    public PayResponse create(String orderId) {
+        // 金额以商城订单为准：pay 与 mall 共库，反查 mall_order.payment，不信任调用方传参
+        Long orderNo = Long.parseLong(orderId);
+        BigDecimal amount = orderMapper.selectPayableAmount(orderNo);
+        if (amount == null) {
+            throw new IllegalArgumentException("订单不存在或不是待付款状态, orderId=" + orderId);
+        }
 //        /// 以下都是bestpay_sdk微信支付的框架
 //        WxPayConfig wxPayConfig = new WxPayConfig();
 //        wxPayConfig.setAppId("********");
@@ -47,7 +57,7 @@ public class PayServiceImpl implements IPayService {
         *支付信息写入数据库
          *
          */
-        PayInfo payInfo = new PayInfo(Long.parseLong(orderId),
+        PayInfo payInfo = new PayInfo(orderNo,
                 /// OrderStatusEnum是bestpaySDK自带的支付转态枚举类
                 OrderStatusEnum.NOTPAY.name(),
                 amount

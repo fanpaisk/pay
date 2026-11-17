@@ -3,13 +3,11 @@ package com.imooc.pay.service;
 import com.imooc.pay.pojo.PayInfo;
 import com.lly835.bestpay.model.PayResponse;
 
-import java.math.BigDecimal;
-
 public interface IPayService {
     /*
-    创建/发起支付
+    创建/发起支付：金额由服务端按 orderNo 反查，不从调用方接收
      */
-    PayResponse create(String orderId, BigDecimal amount);
+    PayResponse create(String orderId);
     /*
     异步通知处理
      */

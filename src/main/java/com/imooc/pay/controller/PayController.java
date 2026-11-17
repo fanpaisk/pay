@@ -24,10 +24,9 @@ public class PayController {
     private WxPayConfig wxPayConfig;
     /// 创建订单方法
     @GetMapping("/create")
-    public ModelAndView create(@RequestParam("orderId") String orderId,
-                               @RequestParam("amount") BigDecimal amount) {
+    public ModelAndView create(@RequestParam("orderId") String orderId) {
 
-        PayResponse response = payServiceImpl.create(orderId, amount);
+        PayResponse response = payServiceImpl.create(orderId);
 
         Map map = new HashMap<>();
         map.put("codeUrl", response.getCodeUrl());
